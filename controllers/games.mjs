@@ -1,3 +1,3 @@
-export default initGamesController(db){
-  
+export default function initGamesController(db) {
+  //
 }
