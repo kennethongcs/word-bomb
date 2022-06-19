@@ -1,5 +1,5 @@
-import sequelizePackage, { Sequelize } from 'sequelize';
-import allConfig from 'config';
+import sequelizePackage from 'sequelize';
+import allConfig from '../config/config.js';
 
 import initGameModel from './game-model.mjs';
 import initUserModel from './user-model.mjs';
@@ -19,8 +19,8 @@ const sequelize = new Sequelize(
 db.User = initUserModel(sequelize, Sequelize.DataTypes);
 db.Game = initGameModel(sequelize, Sequelize.DataTypes);
 
-db.User.hasMany(db.Game, { through: 'user_games' });
-db.Game.hasMany(db.User, { through: 'user_games' });
+db.User.belongsToMany(db.Game, { through: 'user_games' });
+db.Game.belongsToMany(db.User, { through: 'user_games' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
