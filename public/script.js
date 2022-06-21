@@ -1,5 +1,10 @@
-const docWidth = document.querySelector('body').clientWidth;
-const docHeight = document.querySelector('body').clientHeight;
-
-console.log('width', docWidth);
-console.log('height', docHeight);
+/**
+ * TODO
+ * 1. Create interfaces in CSS.
+ * 2. Create button to select "difficulty".
+ *  - include timers and number of lives
+ * -----
+ * ADDITIONAL
+ * 1. Sound of string burning down.
+ * 2. Explosion sound.
+ */
