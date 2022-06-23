@@ -1,3 +1,26 @@
+import axios from 'axios';
+
+const getWord = async (difficulty) => {
+  axios
+    .get('https://random-word-api.herokuapp.com/word')
+    .then((result) => {
+      const gameDifficulty = difficulty;
+      const word = result.data[0];
+      if (gameDifficulty === 'easy') {
+        const slicedWord = word.slice(0, 3);
+        return slicedWord;
+      } else if (gameDifficulty === 'medium') {
+        const slicedWord = word.slice(1, 4);
+        return slicedWord;
+      } else if (gameDifficulty === 'hard') {
+        const slicedWord = word.slice(2, 5);
+        console.log(slicedWord);
+        return slicedWord;
+      }
+    })
+    .catch((err) => console.log(`Error getting word from api: ${err}`));
+};
+
 export default function initGamesController(db) {
   /**
    * TODO
@@ -14,4 +37,13 @@ export default function initGamesController(db) {
    *  - Randomly generate based on input from FRONTEND (eg, at least 3secs/5secs/8secs)
    * 2. Player's lives
    */
+
+  // create the gamestate
+  const create = async () => {};
+
+  return {
+    create,
+  };
 }
+
+initGamesController();
