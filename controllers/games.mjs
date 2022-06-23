@@ -39,7 +39,7 @@ export default function initGamesController(db) {
    */
 
   // create the gamestate
-  const create = async () => {};
+  const create = async (req, res) => {};
 
   return {
     create,
