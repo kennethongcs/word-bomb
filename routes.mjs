@@ -9,4 +9,5 @@ export default function routes(app) {
 
   // load main page
   app.get('/', usersController.root);
+  app.post('/login', usersController.login);
 }
