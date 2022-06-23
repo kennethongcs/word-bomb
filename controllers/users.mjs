@@ -18,7 +18,6 @@ export default function initUsersController(db) {
       const shaObj = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' });
       shaObj.update(req.body.password);
       const hashedPassword = shaObj.getHash('HEX');
-      console.log('hashed password', hashedPassword);
 
       if (hashedPassword === user.password) {
         res.cookie('loggedIn', true);
