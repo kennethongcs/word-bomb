@@ -83,6 +83,14 @@ body {
   /* height: 100%; */
 }
 
+.start-btn-div {
+  background-color: rgb(95, 95, 95);
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  padding: 3px;
+}
+
 .start-btn {
   background-color: rgb(95, 95, 95);
   display: flex;
@@ -93,4 +101,37 @@ body {
 
 .game-window-font {
   font-size: 1.2rem;
+}
+
+.game-display {
+  display: flex;
+  justify-content: center;
+}
+
+.login-div {
+  display: flex;
+  flex-flow: column;
+  padding: 10px;
+  margin-top: 100px;
+  border: 3px solid black;
+}
+
+.label {
+  display: inline-block;
+  clear: left;
+  width: 70px;
+  text-align: right;
+}
+
+.login-btn {
+  width: 75px;
+  margin-top: 7px;
+}
+
+.login-btn-div {
+  text-align: center;
+}
+
+.hidden {
+  display: none;
 }
