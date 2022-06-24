@@ -39,10 +39,19 @@ export default function initGamesController(db) {
    */
 
   // create the gamestate
-  const create = async (req, res) => {};
+  const create = async (req, res) => {
+    console.log(req.body);
+  };
 
+  const logout = async (req, res) => {
+    res.clearCookie('userId');
+    res.clearCookie('sessionId');
+    res.clearCookie('loggedIn');
+    res.redirect('/');
+  };
   return {
     create,
+    logout,
   };
 }
 
