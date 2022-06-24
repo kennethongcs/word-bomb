@@ -7,7 +7,11 @@ export default function routes(app) {
   const usersController = initUsersController(db);
   const gamesController = initGamesController(db);
 
-  // load main page
+  // app.use(usersController.loginCheck);
+  // app.use(usersController.userState);
+
   app.get('/', usersController.root);
   app.post('/login', usersController.login);
+  app.put('/logout', gamesController.logout);
+  app.post('/create', gamesController.create);
 }
