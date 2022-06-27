@@ -1,26 +1,5 @@
 import axios from 'axios';
 
-const getWord = async (difficulty) => {
-  axios
-    .get('https://random-word-api.herokuapp.com/word')
-    .then((result) => {
-      const gameDifficulty = difficulty;
-      const word = result.data[0];
-      if (gameDifficulty === 'easy') {
-        const slicedWord = word.slice(0, 3);
-        return slicedWord;
-      } else if (gameDifficulty === 'medium') {
-        const slicedWord = word.slice(1, 4);
-        return slicedWord;
-      } else if (gameDifficulty === 'hard') {
-        const slicedWord = word.slice(2, 5);
-        console.log(slicedWord);
-        return slicedWord;
-      }
-    })
-    .catch((err) => console.log(`Error getting word from api: ${err}`));
-};
-
 export default function initGamesController(db) {
   /**
    * TODO
@@ -38,20 +17,207 @@ export default function initGamesController(db) {
    * 2. Player's lives
    */
 
-  // create the gamestate
-  const create = async (req, res) => {
-    console.log(req.body);
+  const getWord = async (req, res) => {
+    const { difficulty } = req.body;
+    const randomWord = await db.Word.findOne({
+      order: [db.Sequelize.fn('RANDOM')],
+    });
+    const gameDifficulty = difficulty;
+    const word = randomWord.word;
+    if (gameDifficulty === 'Easy') {
+      const slicedWord = word.slice(0, 3);
+      console.log(`easy: ${slicedWord}`);
+      return slicedWord;
+    } else if (gameDifficulty === 'Medium') {
+      const slicedWord = word.slice(1, 4);
+      console.log(`medium: ${slicedWord}`);
+      return slicedWord;
+    } else if (gameDifficulty === 'Hard') {
+      const slicedWord = word.slice(2, 5);
+      console.log(`hard: ${slicedWord}`);
+      return slicedWord;
+    }
   };
 
-  const logout = async (req, res) => {
-    res.clearCookie('userId');
-    res.clearCookie('sessionId');
-    res.clearCookie('loggedIn');
-    res.redirect('/');
+  // create the gamestate
+  const create = async (req, res) => {
+    console.log('backend', req.body);
+    const duration = parseInt(req.body.duration);
+    const lives = parseInt(req.body.lives);
+    const players = parseInt(req.body.players);
+    const loginUser = parseInt(req.cookies.userId);
+    try {
+      // find game in progress or create new game
+      if (players === 1) {
+        const [currentGame, created] = await db.Game.findOrCreate({
+          where: {
+            gameState: { gameOwner: loginUser },
+          },
+          defaults: {
+            gameState: {
+              gameOwner: loginUser,
+              duration: duration,
+              players: players,
+              lives: {
+                player1: lives,
+                // player2: lives,
+                // player3: lives,
+                // player4: lives
+              },
+            },
+          },
+        });
+        console.log('1 player game created/joined', currentGame);
+        // if game is joined / created then create game in through table
+        if (created) {
+          const currentPlayer = await db.User.findOne({
+            where: {
+              id: loginUser,
+            },
+          });
+          // add game to join table
+          const joinTableEntry = await currentGame.addUser(currentPlayer);
+        }
+        res.send({
+          id: currentGame.id,
+          duration: currentGame.gameState.duration,
+          players: currentGame.gameState.players,
+          lives: currentGame.gameState.lives,
+        });
+      } else if (players === 2) {
+        const [currentGame, created] = await db.Game.findOrCreate({
+          where: {
+            gameState: { gameOwner: loginUser },
+          },
+          defaults: {
+            gameState: {
+              gameOwner: loginUser,
+              duration: duration,
+              players: players,
+              lives: {
+                player1: lives,
+                player2: lives,
+                // player3: lives,
+                // player4: lives
+              },
+            },
+          },
+        });
+        console.log('2 player game created/joined', currentGame);
+        // if game is joined / created then create game in through table
+        if (created) {
+          const currentPlayer = await db.User.findOne({
+            where: {
+              id: loginUser,
+            },
+          });
+          // add game to join table
+          const joinTableEntry = await currentGame.addUser(currentPlayer);
+        }
+        res.send({
+          id: currentGame.id,
+          duration: currentGame.gameState.duration,
+          players: currentGame.gameState.players,
+          lives: currentGame.gameState.lives,
+        });
+      } else if (players === 3) {
+        const [currentGame, created] = await db.Game.findOrCreate({
+          where: {
+            gameState: { gameOwner: loginUser },
+          },
+          defaults: {
+            gameState: {
+              gameOwner: loginUser,
+              duration: duration,
+              players: players,
+              lives: {
+                player1: lives,
+                player2: lives,
+                player3: lives,
+                // player4: lives
+              },
+            },
+          },
+        });
+        console.log('3 player game created/joined', currentGame);
+        // if game is joined / created then create game in through table
+        if (created) {
+          const currentPlayer = await db.User.findOne({
+            where: {
+              id: loginUser,
+            },
+          });
+          // add game to join table
+          const joinTableEntry = await currentGame.addUser(currentPlayer);
+        }
+        res.send({
+          id: currentGame.id,
+          duration: currentGame.gameState.duration,
+          players: currentGame.gameState.players,
+          lives: currentGame.gameState.lives,
+        });
+      } else if (players === 4) {
+        const [currentGame, created] = await db.Game.findOrCreate({
+          where: {
+            gameState: { gameOwner: loginUser },
+          },
+          defaults: {
+            gameState: {
+              gameOwner: loginUser,
+              duration: duration,
+              players: players,
+              lives: {
+                player1: lives,
+                player2: lives,
+                player3: lives,
+                player4: lives,
+              },
+            },
+          },
+        });
+        console.log('4 player game created/joined', currentGame);
+        // if game is joined / created then create game in through table
+        if (created) {
+          const currentPlayer = await db.User.findOne({
+            where: {
+              id: loginUser,
+            },
+          });
+          // add game to join table
+          const joinTableEntry = await currentGame.addUser(currentPlayer);
+        }
+        res.send({
+          id: currentGame.id,
+          duration: currentGame.gameState.duration,
+          players: currentGame.gameState.players,
+          lives: currentGame.gameState.lives,
+        });
+      }
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
   };
+
+  const resetGame = async (req, res) => {
+    //   try {
+    //     const currentGameId = req.params.id;
+    //     const currentGame = await db.Game.findByPk(currentGameId);
+    //     const deleteGame_users = await db.User_games.destroy({
+    //       where: { game_id: currentGameId },
+    //     });
+    //     const deleteGame = await currentGame.destroy({
+    //       where: { id: currentGameId },
+    //     });
+    //   } catch (err) {
+    //     console.log(`Logout error: ${err}`);
+    //   }
+    // };
+  };
+
   return {
     create,
-    logout,
+    resetGame,
+    getWord,
   };
 }
 
