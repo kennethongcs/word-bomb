@@ -8,15 +8,14 @@ export default function initGameModel(sequelize, DataTypes) {
         autoIncrement: true,
         type: DataTypes.INTEGER,
       },
-      game_state: {
-        allowNull: false,
+      gameState: {
         type: DataTypes.JSON,
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
       },
