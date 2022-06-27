@@ -3,6 +3,7 @@ import allConfig from '../config/config.js';
 
 import initGameModel from './game-model.mjs';
 import initUserModel from './user-model.mjs';
+import initWordModel from './word-model.mjs';
 
 const { Sequelize } = sequelizePackage;
 const env = process.env.NODE_ENV || 'development';
@@ -18,6 +19,7 @@ const sequelize = new Sequelize(
 
 db.User = initUserModel(sequelize, Sequelize.DataTypes);
 db.Game = initGameModel(sequelize, Sequelize.DataTypes);
+db.Word = initWordModel(sequelize, Sequelize.DataTypes);
 
 db.User.belongsToMany(db.Game, { through: 'user_games' });
 db.Game.belongsToMany(db.User, { through: 'user_games' });
