@@ -11,7 +11,9 @@ export default function routes(app) {
   // app.use(usersController.userState);
 
   app.get('/', usersController.root);
+  app.post('/word', gamesController.getWord);
   app.post('/login', usersController.login);
-  app.put('/logout', gamesController.logout);
+  app.put('/logout', usersController.logout);
+  app.put('/reset-game/:id');
   app.post('/create', gamesController.create);
 }
