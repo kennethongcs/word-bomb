@@ -55,6 +55,13 @@ export default function initUsersController(db) {
     }
   };
 
+  const logout = async (req, res) => {
+    res.clearCookie('userId');
+    res.clearCookie('sessionId');
+    res.clearCookie('loggedIn');
+    res.redirect('/');
+  };
+
   // const loginCheck = async (req, res, next) => {
   //   req.isUserLoggedIn = false;
   //   if (req.cookies.userId && req.cookies.sessionId) {
@@ -73,5 +80,5 @@ export default function initUsersController(db) {
   //   next();
   // };
 
-  return { root, login };
+  return { root, login, logout };
 }
