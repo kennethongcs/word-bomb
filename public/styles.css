@@ -115,6 +115,7 @@ body {
 
 .canvas {
   display: flex;
+  align-items: center;
   flex-flow: column;
   flex: 1;
   text-align: center;
@@ -210,6 +211,30 @@ body {
   background-color: darkgrey;
   padding: 6px;
   margin-top: 4px;
+}
+
+/* squares for canvas */
+.containerForGridDiv {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+  grid-gap: 10px;
+}
+
+.square {
+  /* center the cell content */
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  font-family: Arial;
+  font-size: 1rem;
+  font-weight: bold;
+  background: transparent;
 }
 
 .hidden {
