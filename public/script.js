@@ -1,20 +1,4 @@
-/**
- * TODO
- * 1. Create interfaces in CSS.
- * 2. Before starting game, certain settings have to be confirmed.
- *  - Create button to select "difficulty".
- *  - Include timers and number of lives.
- * -----
- * ADDITIONAL
- * 1. Sound of string burning down.
- * 2. Explosion sound.
- */
-
-// change game-display to login window
-// add instructions to login
-// remove game_id and username
-// change login / logout button to 'login'
-// hide bottom bar
+let CURRENT_GAME;
 
 const topBar = document.querySelector('.top');
 const bottomBar = document.querySelector('.start-btn-div');
@@ -157,6 +141,64 @@ startingLives.appendChild(startingLivesRangeLabel);
 startingLives.appendChild(startingLivesInputNo);
 settings.appendChild(startingLives);
 
+// add no. of players in settings plan
+const amtOfPlayers = document.createElement('div');
+amtOfPlayers.classList.add('starting-lives', 'setting');
+const amtOfPlayersLabel = document.createElement('label');
+amtOfPlayersLabel.classList.add('starting-lives-label');
+amtOfPlayersLabel.textContent = '🙋‍♂️ Select no. of players (1 - 4)';
+const amtOfPlayersDiv = document.createElement('div');
+const amtOfPlayersRangeLabel = document.createElement('label');
+amtOfPlayersRangeLabel.classList.add('helper-text');
+amtOfPlayersRangeLabel.textContent = 'Input players: ';
+amtOfPlayersDiv.classList.add('range');
+// input FYI
+const noOfPlayersInputNo = document.createElement('input');
+noOfPlayersInputNo.defaultValue = 2;
+noOfPlayersInputNo.classList.add('start-lives-number');
+noOfPlayersInputNo.setAttribute('type', 'number');
+noOfPlayersInputNo.setAttribute('min', '1');
+noOfPlayersInputNo.setAttribute('max', '5');
+
+amtOfPlayers.appendChild(amtOfPlayersLabel);
+amtOfPlayers.appendChild(amtOfPlayersDiv);
+amtOfPlayers.appendChild(amtOfPlayersRangeLabel);
+amtOfPlayers.appendChild(noOfPlayersInputNo);
+settings.appendChild(amtOfPlayers);
+
+// add difficulty dropdown box in settings pane
+const difficultyLevel = document.createElement('div');
+difficultyLevel.classList.add('difficulty-level', 'setting');
+const difficultyLevelLabel = document.createElement('label');
+difficultyLevelLabel.classList.add('difficultyLevel-label');
+difficultyLevelLabel.textContent = '💪 Select difficulty level';
+const difficultyLevelDiv = document.createElement('div');
+const difficultyLevelSelectLabel = document.createElement('label');
+difficultyLevelSelectLabel.classList.add('helper-text');
+difficultyLevelSelectLabel.setAttribute('for', 'difficulty');
+difficultyLevelSelectLabel.textContent = 'Difficulty: ';
+difficultyLevelDiv.classList.add('range');
+const difficultyLevels = ['Easy', 'Medium', 'Hard'];
+// input FYI
+const difficultySelector = document.createElement('select');
+for (let i = 0; i < difficultyLevels.length; i += 1) {
+  let option = document.createElement('option');
+  option.value = difficultyLevels[i];
+  option.text = difficultyLevels[i];
+  difficultySelector.appendChild(option);
+}
+
+difficultyLevel.appendChild(difficultyLevelLabel);
+difficultyLevel.appendChild(difficultyLevelDiv);
+difficultyLevel.appendChild(difficultyLevelSelectLabel);
+difficultyLevel.appendChild(difficultySelector);
+settings.appendChild(difficultyLevel);
+
+// prevent keydown for inputs (only allow arrows)
+minDurationInputNo.addEventListener('keydown', (e) => e.preventDefault());
+startingLivesInputNo.addEventListener('keydown', (e) => e.preventDefault());
+noOfPlayersInputNo.addEventListener('keydown', (e) => e.preventDefault());
+
 //----------------------------------
 //----------------------------------
 //----------------------------------
@@ -183,8 +225,10 @@ const ifLoginTrue = () => {
   logoutBtn.classList.add('logout-btn', 'btn');
   logoutBtn.textContent = 'Logout';
   loginLogoutDiv.appendChild(logoutBtn);
+
+  // upon logout click DOING
   logoutBtn.addEventListener('click', () => {
-    axios.put('/logout');
+    axios.put(`/logout`);
     location.reload();
   });
 };
@@ -228,15 +272,88 @@ rulesBtn.addEventListener('click', () => {
     startGameBtn.classList.remove('blur');
     rulesBtn.textContent = 'Edit rules';
     startGameBtn.disabled = false;
-    // send settings to backend
-    axios.post('/create', {
-      duration: minDurationInputNo.value,
-      lives: startingLivesInputNo.value,
-    });
+    // saved settings
+    console.log(`Settings:
+    duration: ${parseInt(minDurationInputNo.value)}
+    lives: ${parseInt(startingLivesInputNo.value)}
+    players: ${parseInt(noOfPlayersInputNo.value)}
+    difficulty: ${difficultySelector.value}`);
   }
 });
 
 // start button function
+// TODO
+// 1. remove start btn
+// 2. add input to guess word
+// 3. send input to server for verification
+// 4. if correct, next player's turn
+// 5. if wrong, lose 1 life
 startGameBtn.addEventListener('click', () => {
-  console.log('clicked');
+  // change 'edit rules' button to 'show rules'
+  rulesBtn.textContent = 'Show rules';
+  // disable settings input
+  minDurationInputNo.disabled = true;
+  startingLivesInputNo.disabled = true;
+  noOfPlayersInputNo.disabled = true;
+  difficultySelector.disabled = true;
+  // send settings to backend
+  axios
+    .post('/create', {
+      duration: parseInt(minDurationInputNo.value),
+      lives: parseInt(startingLivesInputNo.value),
+      players: parseInt(noOfPlayersInputNo.value),
+      difficulty: difficultySelector.value,
+    })
+    .then((response) => {
+      const gameData = response.data;
+      console.log(gameData); // delete this TODO
+      CURRENT_GAME = gameData.id;
+      // remove game intro message
+      document.querySelector('.game-intro').remove();
+      // add 9 squares
+      const containerForGridDiv = document.createElement('div');
+      containerForGridDiv.classList.add('container');
+      const gridDiv = document.createElement('div');
+      gridDiv.classList.add('grid');
+      // create 9 squares
+      for (let i = 0; i < 9; i += 1) {
+        const squares = document.createElement('div');
+        squares.classList.add('square', `square${i}`);
+        gridDiv.appendChild(squares);
+        for (let j = 0; j < 1; j += 1) {
+          // add name and lives div into each square
+          const nameDiv = document.createElement('div');
+          const nameLabel = document.createElement('label');
+          nameDiv.classList.add(`nameDiv-${i}`);
+          nameLabel.classList.add(`nameLabel-${i}`);
+          // nameLabel.textContent = i;
+          nameDiv.appendChild(nameLabel);
+          const livesDiv = document.createElement('div');
+          const livesLabel = document.createElement('label');
+          livesDiv.classList.add(`livesDiv-${i}`);
+          livesLabel.classList.add(`livesLabel-${i}`);
+          livesDiv.appendChild(livesLabel);
+
+          squares.appendChild(nameDiv);
+          squares.appendChild(livesDiv);
+        }
+      }
+      containerForGridDiv.appendChild(gridDiv);
+      canvas.appendChild(containerForGridDiv);
+
+      // add bomb img to middle square
+      const imageBomb = document.createElement('img');
+      imageBomb.src = 'bomb.png';
+      document.querySelector('.square4').appendChild(imageBomb);
+      createPlayers(gameData);
+
+      // get word
+      axios
+        .post('/word', {
+          difficulty: difficultySelector.value,
+        })
+        .then((response) => {
+          console.log(response.data);
+        });
+    });
 });
