@@ -16,11 +16,11 @@ export default function initUserModel(sequelize, DateTypes) {
         allowNull: false,
         type: DateTypes.TEXT,
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         type: DateTypes.DATE,
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         type: DateTypes.DATE,
       },
