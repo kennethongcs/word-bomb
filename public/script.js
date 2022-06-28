@@ -242,12 +242,12 @@ loginBtn.addEventListener('click', () => {
     })
     .then((response) => {
       const userData = response.data.user;
-      const userName = userData.email.split('@')[0];
+      const username = userData.email.split('@')[0];
       // console.log(userName);
       // console.log(userData);
       ifLoginTrue();
       // gameId.textContent = userData.id;
-      userId.textContent = `${userName}'s room`;
+      userId.textContent = `${username}'s room`;
     })
     .catch((err) => {
       console.log(`Login error: ${err}`);
@@ -257,6 +257,13 @@ loginBtn.addEventListener('click', () => {
 // if user is already logged in
 if (document.cookie.split(';').some((item) => item.includes('loggedIn=true'))) {
   ifLoginTrue();
+  // ensure that username carries throughout the login session
+  axios.get('/user').then((response) => {
+    const userData = response.data;
+    const userEmail = userData.email;
+    const username = userEmail.split('@')[0];
+    userId.textContent = `${username}'s room`;
+  });
 }
 
 // upon edit rules click
