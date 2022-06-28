@@ -62,6 +62,18 @@ export default function initUsersController(db) {
     res.redirect('/');
   };
 
+  const user = async (req, res) => {
+    const userId = req.cookies.userId;
+
+    const user = await db.User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    res.send(user);
+  };
+
   // const loginCheck = async (req, res, next) => {
   //   req.isUserLoggedIn = false;
   //   if (req.cookies.userId && req.cookies.sessionId) {
@@ -80,5 +92,5 @@ export default function initUsersController(db) {
   //   next();
   // };
 
-  return { root, login, logout };
+  return { root, login, logout, user };
 }
