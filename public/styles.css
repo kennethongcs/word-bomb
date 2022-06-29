@@ -83,7 +83,6 @@ body {
 }
 
 /* game container (contains edit rules btn and canvas) */
-
 .game-container {
   display: flex;
   flex-flow: column;
@@ -123,7 +122,24 @@ body {
   width: 100%;
 }
 
-/* botton banner */
+.square4 {
+  position: relative;
+}
+
+.bomb-img {
+  position: absolute;
+  left: 40px;
+  top: 25px;
+}
+
+.bomb-word {
+  position: absolute;
+  color: white;
+  left: 84px;
+  bottom: 79px;
+}
+
+/* bottom banner */
 
 .start-btn-div {
   background-color: rgb(95, 95, 95);
@@ -157,6 +173,11 @@ body {
 
 .blur {
   filter: blur(4px);
+}
+
+.input-field {
+  text-align: center;
+  font-weight: normal;
 }
 
 /* buttons */
