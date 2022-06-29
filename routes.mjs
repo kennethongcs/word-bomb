@@ -13,6 +13,7 @@ export default function routes(app) {
   app.get('/', usersController.root);
   app.get('/user', usersController.user);
   app.post('/word', gamesController.getWord);
+  app.post('/wordverification', gamesController.checkWord);
   app.post('/login', usersController.login);
   app.put('/logout', usersController.logout);
   app.put('/reset-game/:id');
