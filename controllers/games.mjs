@@ -27,16 +27,20 @@ export default function initGamesController(db) {
     if (gameDifficulty === 'Easy') {
       const slicedWord = word.slice(0, 3);
       console.log(`easy: ${slicedWord}`);
-      return slicedWord;
+      res.send(slicedWord);
     } else if (gameDifficulty === 'Medium') {
       const slicedWord = word.slice(1, 4);
       console.log(`medium: ${slicedWord}`);
-      return slicedWord;
+      res.send(slicedWord);
     } else if (gameDifficulty === 'Hard') {
       const slicedWord = word.slice(2, 5);
       console.log(`hard: ${slicedWord}`);
-      return slicedWord;
+      res.send(slicedWord);
     }
+  };
+  DOING;
+  const checkWord = async (req, res) => {
+    //
   };
 
   // create the gamestate
@@ -198,6 +202,7 @@ export default function initGamesController(db) {
     }
   };
 
+  // TODO
   const resetGame = async (req, res) => {
     //   try {
     //     const currentGameId = req.params.id;
@@ -218,6 +223,7 @@ export default function initGamesController(db) {
     create,
     resetGame,
     getWord,
+    checkWord,
   };
 }
 
