@@ -194,6 +194,30 @@ difficultyLevel.appendChild(difficultyLevelSelectLabel);
 difficultyLevel.appendChild(difficultySelector);
 settings.appendChild(difficultyLevel);
 
+// input field to collect entry for answer
+const inputField = document.createElement('input');
+inputField.classList.add('input-field', 'hidden');
+bottomBar.appendChild(inputField);
+
+// hidden submit button for input field
+const inputFieldSubmitBtn = document.createElement('input');
+inputFieldSubmitBtn.setAttribute('type', 'submit');
+inputFieldSubmitBtn.classList.add('hidden');
+bottomBar.appendChild(inputFieldSubmitBtn);
+
+// addEventListener for inputField
+inputField.addEventListener('keypress', (x) => {
+  if (x.key === 'Enter') {
+    // verify answer with server DOING
+    console.log(inputField.value);
+    inputField.value = '';
+  }
+});
+
+// div to add into bomb <img>
+const bombWord = document.createElement('p');
+bombWord.classList.add('bomb-word');
+
 // prevent keydown for inputs (only allow arrows)
 minDurationInputNo.addEventListener('keydown', (e) => e.preventDefault());
 startingLivesInputNo.addEventListener('keydown', (e) => e.preventDefault());
@@ -289,12 +313,6 @@ rulesBtn.addEventListener('click', () => {
 });
 
 // start button function
-// TODO
-// 1. remove start btn
-// 2. add input to guess word
-// 3. send input to server for verification
-// 4. if correct, next player's turn
-// 5. if wrong, lose 1 life
 startGameBtn.addEventListener('click', () => {
   // change 'edit rules' button to 'show rules'
   rulesBtn.textContent = 'Show rules';
@@ -348,19 +366,37 @@ startGameBtn.addEventListener('click', () => {
       containerForGridDiv.appendChild(gridDiv);
       canvas.appendChild(containerForGridDiv);
 
-      // add bomb img to middle square
+      // add bomb <img> to middle square
       const imageBomb = document.createElement('img');
+      imageBomb.classList.add('bomb-img');
       imageBomb.src = 'bomb.png';
       document.querySelector('.square4').appendChild(imageBomb);
       createPlayers(gameData);
 
-      // get word
+      // 1. remove start btn
+      startGameBtn.remove();
+      // 2. add input to bottom border
+      inputField.classList.remove('hidden');
       axios
         .post('/word', {
           difficulty: difficultySelector.value,
         })
         .then((response) => {
-          console.log(response.data);
+          console.log(`response: ${response.data}`);
+          // TODO
+          // 1. get word and add into bomb
+          // add bomb word into bomb <img>
+          bombWord.textContent = response.data;
+          document.querySelector('.square4').appendChild(bombWord);
+          // 3. send input to server for verification
+          inputFieldSubmitBtn.addEventListener('keypress', (x) => {
+            if (x.key === 'Enter') {
+              // send a request to server to check if word exists
+            }
+          });
+          // 4. if correct, next player's turn
+          // 5. if wrong, lose 1 life
+          // 6. add word into center of bomb
         });
     });
 });
