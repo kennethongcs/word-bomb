@@ -1,4 +1,7 @@
 import axios from 'axios';
+import sequelizePackage from 'sequelize';
+const { Sequelize } = sequelizePackage;
+// const { Sequelize } = 'sequelize';
 
 export default function initGamesController(db) {
   /**
@@ -38,9 +41,30 @@ export default function initGamesController(db) {
       res.send(slicedWord);
     }
   };
-  DOING;
+  // DOING
   const checkWord = async (req, res) => {
-    //
+    const guess = req.body.input;
+    console.log(`guess: ${guess}`);
+    const Op = Sequelize.Op;
+    try {
+      const check = await db.Word.findAll({
+        where: {
+          word:
+            // [Op.like]: `%${guess}`,
+            guess,
+        },
+        raw: true,
+      });
+      if (check.length >= 1) {
+        console.log('✅ correct word');
+        res.send('Correct');
+      } else {
+        console.log('❌ wrong word');
+        res.send('Wrong');
+      }
+    } catch (err) {
+      console.log(`Word check error: ${err}`);
+    }
   };
 
   // create the gamestate
