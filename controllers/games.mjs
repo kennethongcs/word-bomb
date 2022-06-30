@@ -53,8 +53,9 @@ export default function initGamesController(db) {
             // [Op.like]: `%${guess}`,
             guess,
         },
-        raw: true,
+        // raw: true,
       });
+      // console.log(check);
       if (check.length >= 1) {
         console.log('✅ correct word');
         res.send('Correct');
@@ -95,7 +96,7 @@ export default function initGamesController(db) {
             },
           },
         });
-        console.log('1 player game created/joined', currentGame);
+        console.log('1 player game created/joined');
         // if game is joined / created then create game in through table
         if (created) {
           const currentPlayer = await db.User.findOne({
@@ -131,7 +132,7 @@ export default function initGamesController(db) {
             },
           },
         });
-        console.log('2 player game created/joined', currentGame);
+        console.log('2 player game created/joined');
         // if game is joined / created then create game in through table
         if (created) {
           const currentPlayer = await db.User.findOne({
@@ -167,7 +168,7 @@ export default function initGamesController(db) {
             },
           },
         });
-        console.log('3 player game created/joined', currentGame);
+        console.log('3 player game created/joined');
         // if game is joined / created then create game in through table
         if (created) {
           const currentPlayer = await db.User.findOne({
@@ -203,7 +204,7 @@ export default function initGamesController(db) {
             },
           },
         });
-        console.log('4 player game created/joined', currentGame);
+        console.log('4 player game created/joined');
         // if game is joined / created then create game in through table
         if (created) {
           const currentPlayer = await db.User.findOne({
