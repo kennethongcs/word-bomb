@@ -210,6 +210,10 @@ body {
   padding-right: 10px;
   background: transparent;
 }
+.rules-btn:hover {
+  background-color: white;
+  color: black;
+}
 
 /* settings pane */
 .helper-header {
