@@ -178,6 +178,7 @@ body {
 .input-field {
   text-align: center;
   font-weight: normal;
+  border-radius: 1rem;
 }
 
 /* buttons */
