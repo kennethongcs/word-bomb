@@ -197,22 +197,14 @@ settings.appendChild(difficultyLevel);
 // input field to collect entry for answer
 const inputField = document.createElement('input');
 inputField.classList.add('input-field', 'hidden');
+inputField.placeholder = 'Type answer here';
 bottomBar.appendChild(inputField);
 
 // hidden submit button for input field
-const inputFieldSubmitBtn = document.createElement('input');
-inputFieldSubmitBtn.setAttribute('type', 'submit');
-inputFieldSubmitBtn.classList.add('hidden');
-bottomBar.appendChild(inputFieldSubmitBtn);
-
-// addEventListener for inputField
-inputField.addEventListener('keypress', (x) => {
-  if (x.key === 'Enter') {
-    // verify answer with server DOING
-    console.log(inputField.value);
-    inputField.value = '';
-  }
-});
+// const inputFieldSubmitBtn = document.createElement('input');
+// inputFieldSubmitBtn.setAttribute('type', 'submit');
+// inputFieldSubmitBtn.classList.add('hidden');
+// bottomBar.appendChild(inputFieldSubmitBtn);
 
 // div to add into bomb <img>
 const bombWord = document.createElement('p');
@@ -377,26 +369,45 @@ startGameBtn.addEventListener('click', () => {
       startGameBtn.remove();
       // 2. add input to bottom border
       inputField.classList.remove('hidden');
+      // focus on input box
+      inputField.focus();
+      // get guessing word from database
       axios
         .post('/word', {
           difficulty: difficultySelector.value,
         })
         .then((response) => {
           console.log(`response: ${response.data}`);
-          // TODO
-          // 1. get word and add into bomb
+          const guessLetters = response.data;
+          // get word and add into bomb
           // add bomb word into bomb <img>
           bombWord.textContent = response.data;
           document.querySelector('.square4').appendChild(bombWord);
-          // 3. send input to server for verification
-          inputFieldSubmitBtn.addEventListener('keypress', (x) => {
+          // send input to server for verification
+          inputField.addEventListener('keypress', (x) => {
             if (x.key === 'Enter') {
-              // send a request to server to check if word exists
+              // check if input contains the letters taken from server
+              const playersGuess = inputField.value;
+              // console.log(playersGuess);
+              if (playersGuess.includes(guessLetters)) {
+                // send a request to server to check if word exists
+                axios
+                  .post('/wordverification', {
+                    input: inputField.value,
+                  })
+                  .then((response) => {
+                    const result = response.data;
+                    if (result === 'correct') {
+                      // TODO
+                      // 1. pass turn to next player
+                    } else {
+                      // 1. lose 1 life, next player turn
+                    }
+                  });
+                inputField.value = '';
+              }
             }
           });
-          // 4. if correct, next player's turn
-          // 5. if wrong, lose 1 life
-          // 6. add word into center of bomb
         });
     });
 });
