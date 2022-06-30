@@ -197,7 +197,7 @@ settings.appendChild(difficultyLevel);
 // input field to collect entry for answer
 const inputField = document.createElement('input');
 inputField.classList.add('input-field', 'hidden');
-inputField.placeholder = 'Type answer here';
+inputField.placeholder = 'Type here';
 bottomBar.appendChild(inputField);
 
 // hidden submit button for input field
@@ -242,7 +242,7 @@ const ifLoginTrue = () => {
   logoutBtn.textContent = 'Logout';
   loginLogoutDiv.appendChild(logoutBtn);
 
-  // upon logout click DOING
+  // upon logout click TODO
   logoutBtn.addEventListener('click', () => {
     axios.put(`/logout`);
     location.reload();
@@ -313,6 +313,9 @@ startGameBtn.addEventListener('click', () => {
   startingLivesInputNo.disabled = true;
   noOfPlayersInputNo.disabled = true;
   difficultySelector.disabled = true;
+
+  // TODO end game button
+
   // send settings to backend
   axios
     .post('/create', {
@@ -371,7 +374,17 @@ startGameBtn.addEventListener('click', () => {
       inputField.classList.remove('hidden');
       // focus on input box
       inputField.focus();
-      // get guessing word from database
+      // start countdown timer & fizzing sound TODO
+      const timer =
+        (gameData.duration + randomNumberGenerator(difficultySelector.value)) *
+        1000;
+      console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer);
+      let timeout = false;
+      // timeout function (can't cleartimeout when it is in another func) BUG
+      const myTimeout = setTimeout(() => {
+        // run function if timer ended
+        timerEnded();
+      }, timer);
       axios
         .post('/word', {
           difficulty: difficultySelector.value,
@@ -397,11 +410,13 @@ startGameBtn.addEventListener('click', () => {
                   })
                   .then((response) => {
                     const result = response.data;
-                    if (result === 'correct') {
+                    if (result === 'Correct') {
                       // TODO
+                      // 1. stop timer
+                      clearInterval(myTimeout);
+                      console.log('timeout cleared');
                       // 1. pass turn to next player
-                    } else {
-                      // 1. lose 1 life, next player turn
+                      // 2. start btn appears again
                     }
                   });
                 inputField.value = '';
