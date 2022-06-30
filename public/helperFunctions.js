@@ -75,3 +75,32 @@ const createPlayers = (gameData) => {
     );
   }
 };
+
+const randomNumberGenerator = (difficultyLevel) => {
+  // easy + 3-6secs
+  // medium + 2-5secs
+  // hard + 1-3secs
+  if (difficultyLevel === 'Easy') {
+    return Math.floor(Math.random() * (5 - 2) + 2);
+  } else if (difficultyLevel === 'Medium') {
+    return Math.floor(Math.random() * (4 - 1) + 1);
+  } else if (difficultyLevel === 'Hard') {
+    return Math.floor(Math.random() * (2 - 0) + 0);
+  }
+};
+
+// const countdownTimer = (time) => {
+//   setTimeout(() => {
+//     timeout = true;
+//     console.log(
+//       '🚀 ~ file: helperFunctions.js ~ line 95 ~ setTimeout ~ timeout',
+//       timeout
+//     );
+//   }, time);
+// };
+
+const timerEnded = () => {
+  console.log('timeout!');
+  // 1. lose 1 life, next player turn
+  // 2. show start button
+};
