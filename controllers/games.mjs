@@ -80,13 +80,15 @@ export default function initGamesController(db) {
       if (players === 1) {
         const [currentGame, created] = await db.Game.findOrCreate({
           where: {
-            gameState: { gameOwner: loginUser },
+            gameState: { gameOwner: loginUser, status: 'active' },
           },
           defaults: {
             gameState: {
+              status: 'active',
               gameOwner: loginUser,
               duration: duration,
               players: players,
+              currentPlayer: 1,
               lives: {
                 player1: lives,
                 // player2: lives,
@@ -109,20 +111,25 @@ export default function initGamesController(db) {
         }
         res.send({
           id: currentGame.id,
+          gameOwner: currentGame.gameState.gameOwner,
+          status: currentGame.gameState.status,
           duration: currentGame.gameState.duration,
           players: currentGame.gameState.players,
           lives: currentGame.gameState.lives,
+          currentPlayer: currentGame.gameState.currentPlayer,
         });
       } else if (players === 2) {
         const [currentGame, created] = await db.Game.findOrCreate({
           where: {
-            gameState: { gameOwner: loginUser },
+            gameState: { gameOwner: loginUser, status: 'active' },
           },
           defaults: {
             gameState: {
+              status: 'active',
               gameOwner: loginUser,
               duration: duration,
               players: players,
+              currentPlayer: 1,
               lives: {
                 player1: lives,
                 player2: lives,
@@ -145,20 +152,25 @@ export default function initGamesController(db) {
         }
         res.send({
           id: currentGame.id,
+          gameOwner: currentGame.gameState.gameOwner,
+          status: currentGame.status,
           duration: currentGame.gameState.duration,
           players: currentGame.gameState.players,
           lives: currentGame.gameState.lives,
+          currentPlayer: currentGame.gameState.currentPlayer,
         });
       } else if (players === 3) {
         const [currentGame, created] = await db.Game.findOrCreate({
           where: {
-            gameState: { gameOwner: loginUser },
+            gameState: { gameOwner: loginUser, status: 'active' },
           },
           defaults: {
             gameState: {
+              status: 'active',
               gameOwner: loginUser,
               duration: duration,
               players: players,
+              currentPlayer: 1,
               lives: {
                 player1: lives,
                 player2: lives,
@@ -181,20 +193,25 @@ export default function initGamesController(db) {
         }
         res.send({
           id: currentGame.id,
+          gameOwner: currentGame.gameState.gameOwner,
+          status: currentGame.gameState.status,
           duration: currentGame.gameState.duration,
           players: currentGame.gameState.players,
           lives: currentGame.gameState.lives,
+          currentPlayer: currentGame.gameState.currentPlayer,
         });
       } else if (players === 4) {
         const [currentGame, created] = await db.Game.findOrCreate({
           where: {
-            gameState: { gameOwner: loginUser },
+            gameState: { gameOwner: loginUser, status: 'active' },
           },
           defaults: {
             gameState: {
+              status: 'active',
               gameOwner: loginUser,
               duration: duration,
               players: players,
+              currentPlayer: 1,
               lives: {
                 player1: lives,
                 player2: lives,
@@ -217,9 +234,12 @@ export default function initGamesController(db) {
         }
         res.send({
           id: currentGame.id,
+          gameOwner: currentGame.gameState.gameOwner,
+          status: currentGame.gameState.status,
           duration: currentGame.gameState.duration,
           players: currentGame.gameState.players,
           lives: currentGame.gameState.lives,
+          currentPlayer: currentGame.gameState.currentPlayer,
         });
       }
     } catch (err) {
@@ -227,21 +247,162 @@ export default function initGamesController(db) {
     }
   };
 
-  // TODO
   const resetGame = async (req, res) => {
-    //   try {
-    //     const currentGameId = req.params.id;
-    //     const currentGame = await db.Game.findByPk(currentGameId);
-    //     const deleteGame_users = await db.User_games.destroy({
-    //       where: { game_id: currentGameId },
-    //     });
-    //     const deleteGame = await currentGame.destroy({
-    //       where: { id: currentGameId },
-    //     });
-    //   } catch (err) {
-    //     console.log(`Logout error: ${err}`);
-    //   }
-    // };
+    try {
+      const currentGameId = req.params.id;
+      const currentGame = await db.Game.findOne({
+        where: { id: currentGameId },
+      });
+      const updateGameStatus = await currentGame.update({
+        gameState: {
+          status: 'completed',
+        },
+      });
+      res.send('Game ended');
+    } catch (err) {
+      console.log(`Logout error: ${err}`);
+    }
+  };
+
+  // DOING
+  const nextPlayer = async (req, res) => {
+    try {
+      // get current player
+      console.log(req.body);
+      const data = req.body.CURRENT_GAME;
+      let currentPlayer = data.currentPlayer;
+      const { players } = data;
+      const { id } = data;
+      const { loginUser } = data;
+      const { duration } = data;
+
+      // increase current player by 1
+      console.log('currentplayer', currentPlayer);
+      currentPlayer += 1;
+      // if currentPlayer > players, change back to 1
+      if (currentPlayer > players) {
+        currentPlayer = 1;
+      }
+      console.log('currentplayerafter', currentPlayer);
+      // get currentGame
+      const currentGame = await db.Game.findOne({
+        where: { id: id },
+      });
+      // update currentPlayer in game_state
+      if (players === 1) {
+        const player1lives = data.lives.player1;
+        const updateGameState = await currentGame.update({
+          gameState: {
+            status: 'active',
+            gameOwner: loginUser,
+            duration: duration,
+            players: players,
+            currentPlayer: currentPlayer,
+            lives: {
+              player1: player1lives,
+              // player2: lives,
+              // player3: lives,
+              // player4: lives
+            },
+          },
+        });
+        res.send({
+          id: updateGameState.id,
+          status: updateGameState.gameState.status,
+          duration: updateGameState.gameState.duration,
+          players: updateGameState.gameState.players,
+          lives: updateGameState.gameState.lives,
+          currentPlayer: updateGameState.gameState.currentPlayer,
+        });
+      }
+      if (players === 2) {
+        console.log(`2 player game`);
+        const player1lives = data.lives.player1;
+        const player2lives = data.lives.player2;
+        const updateGameState = await currentGame.update({
+          gameState: {
+            status: 'active',
+            gameOwner: loginUser,
+            duration: duration,
+            players: players,
+            currentPlayer: currentPlayer,
+            lives: {
+              player1: player1lives,
+              player2: player2lives,
+              // player3: lives,
+              // player4: lives
+            },
+          },
+        });
+        res.send({
+          id: updateGameState.id,
+          status: updateGameState.gameState.status,
+          duration: updateGameState.gameState.duration,
+          players: updateGameState.gameState.players,
+          lives: updateGameState.gameState.lives,
+          currentPlayer: updateGameState.gameState.currentPlayer,
+        });
+      }
+      if (players === 3) {
+        const player1lives = data.lives.player1;
+        const player2lives = data.lives.player2;
+        const player3lives = data.lives.player3;
+        const updateGameState = await currentGame.update({
+          gameState: {
+            status: 'active',
+            gameOwner: loginUser,
+            duration: duration,
+            players: players,
+            currentPlayer: currentPlayer,
+            lives: {
+              player1: player1lives,
+              player2: player2lives,
+              player3: player3lives,
+              // player4: lives
+            },
+          },
+        });
+        res.send({
+          id: updateGameState.id,
+          status: updateGameState.gameState.status,
+          duration: updateGameState.gameState.duration,
+          players: updateGameState.gameState.players,
+          lives: updateGameState.gameState.lives,
+          currentPlayer: updateGameState.gameState.currentPlayer,
+        });
+      }
+      if (players === 4) {
+        const player1lives = data.lives.player1;
+        const player2lives = data.lives.player2;
+        const player3lives = data.lives.player3;
+        const player4lives = data.lives.player4;
+        const updateGameState = await currentGame.update({
+          gameState: {
+            status: 'active',
+            gameOwner: loginUser,
+            duration: duration,
+            players: players,
+            currentPlayer: currentPlayer,
+            lives: {
+              player1: player1lives,
+              player2: player2lives,
+              player3: player3lives,
+              player4: player4lives,
+            },
+          },
+        });
+        res.send({
+          id: updateGameState.id,
+          status: updateGameState.gameState.status,
+          duration: updateGameState.gameState.duration,
+          players: updateGameState.gameState.players,
+          lives: updateGameState.gameState.lives,
+          currentPlayer: updateGameState.gameState.currentPlayer,
+        });
+      }
+    } catch (err) {
+      console.log(`Next player error: ${err}`);
+    }
   };
 
   return {
@@ -249,6 +410,7 @@ export default function initGamesController(db) {
     resetGame,
     getWord,
     checkWord,
+    nextPlayer,
   };
 }
 
