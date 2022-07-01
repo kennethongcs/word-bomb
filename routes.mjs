@@ -17,4 +17,5 @@ export default function routes(app) {
   app.put('/reset-game/:id', gamesController.resetGame);
   app.put('/next-player', gamesController.nextPlayer);
   app.post('/create', gamesController.create);
+  app.put('/lose-life', gamesController.loseLife);
 }
