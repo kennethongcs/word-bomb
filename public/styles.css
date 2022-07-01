@@ -216,6 +216,20 @@ body {
   color: black;
 }
 
+.endgame-btn {
+  position: absolute;
+  right: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 1rem;
+  background-color: darkred;
+  color: white;
+}
+.endgame-btn:hover {
+  color: black;
+  background-color: red;
+}
+
 /* settings pane */
 .helper-header {
   font-size: larger;
