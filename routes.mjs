@@ -7,15 +7,14 @@ export default function routes(app) {
   const usersController = initUsersController(db);
   const gamesController = initGamesController(db);
 
-  // app.use(usersController.loginCheck);
-  // app.use(usersController.userState);
-
   app.get('/', usersController.root);
   app.get('/user', usersController.user);
-  app.post('/word', gamesController.getWord);
-  app.post('/wordverification', gamesController.checkWord);
   app.post('/login', usersController.login);
   app.put('/logout', usersController.logout);
-  app.put('/reset-game/:id');
+
+  app.post('/word', gamesController.getWord);
+  app.post('/wordverification', gamesController.checkWord);
+  app.put('/reset-game/:id', gamesController.resetGame);
+  app.put('/next-player', gamesController.nextPlayer);
   app.post('/create', gamesController.create);
 }
