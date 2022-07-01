@@ -386,7 +386,7 @@ startGameBtn.addEventListener('click', () => {
       inputField.focus();
       // start countdown timer & fizzing sound -> TODO
       const timer =
-        (gameData.duration + randomNumberGenerator(difficultySelector.value)) *
+        (gameData.duration + randomNumberGenerator(CURRENT_GAME.difficulty)) *
         1000;
       console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer); // LOG
       let timeout = false;
@@ -395,7 +395,9 @@ startGameBtn.addEventListener('click', () => {
       const myTimeout = setTimeout(() => {
         // run function if timer ended before player gets word correct
         timerEnded();
+        nextPlayer(gameData.players);
       }, timer);
+      // go to next player
       axios
         .post('/word', {
           difficulty: difficultySelector.value,
@@ -427,7 +429,7 @@ startGameBtn.addEventListener('click', () => {
                       clearInterval(myTimeout);
                       console.log('timeout cleared'); // LOG
                       // 2. next player turn
-                      nextPlayer(gameData.players);
+                      nextPlayer();
                       // 3. show start button
                       // 1. pass turn to next player
                       // 2. start btn appears again
