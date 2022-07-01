@@ -21,8 +21,12 @@ db.User = initUserModel(sequelize, Sequelize.DataTypes);
 db.Game = initGameModel(sequelize, Sequelize.DataTypes);
 db.Word = initWordModel(sequelize, Sequelize.DataTypes);
 
-db.User.belongsToMany(db.Game, { through: 'user_games' });
-db.Game.belongsToMany(db.User, { through: 'user_games' });
+db.User.belongsToMany(db.Game, {
+  through: 'user_games',
+});
+db.Game.belongsToMany(db.User, {
+  through: 'user_games',
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
