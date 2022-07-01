@@ -111,18 +111,19 @@ const randomNumberGenerator = (difficultyLevel) => {
   }
 };
 
-const timerEnded = (currentPlayer) => {
-  console.log('timeout!');
+// DOING
+const timerEnded = () => {
+  console.log('timeout! 💣');
   // 1. lose 1 life, next player turn
+  axios.put('/lose-life', {
+    CURRENT_GAME
+  })
   // 2. show start button
 };
 
-const nextPlayer = (players) => {
+const nextPlayer = () => {
   console.log('next player');
-  axios.put(`/next-player/`, {
-    // currentPlayer: CURRENT_GAME.currentPlayer,
-    // players: CURRENT_GAME.players,
-    // id: CURRENT_GAME.id,
+  axios.put(`/next-player`, {
     CURRENT_GAME
   }).then((response) => {
     console.log(response.data);
