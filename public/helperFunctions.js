@@ -109,4 +109,8 @@ const timerEnded = () => {
 
 const nextPlayer = (players) => {
   console.log('next player');
+  let currentPlayer = 1
+  for(let i = currentPlayer; i <= players; i += 1){
+    currentPlayer
+  }
 };
