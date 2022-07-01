@@ -41,7 +41,7 @@ export default function initGamesController(db) {
       res.send(slicedWord);
     }
   };
-  // DOING
+
   const checkWord = async (req, res) => {
     const guess = req.body.input;
     console.log(`guess: ${guess}`);
