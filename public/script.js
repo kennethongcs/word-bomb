@@ -74,6 +74,12 @@ rulesBtn.classList.add('rules-btn', 'btn');
 rulesBtn.setAttribute('type', 'btn');
 rulesBtn.textContent = 'Edit rules';
 
+// end game button
+const endGameBtn = document.createElement('button');
+endGameBtn.classList.add('endgame-btn', 'btn');
+endGameBtn.setAttribute('type', 'btn');
+endGameBtn.textContent = 'End game';
+
 // settings pane
 const settings = document.createElement('div');
 settings.classList.add('settings-pane', 'hidden');
@@ -304,7 +310,9 @@ rulesBtn.addEventListener('click', () => {
   }
 });
 
-// start button function
+/**
+ * end button function DOING
+ */
 startGameBtn.addEventListener('click', () => {
   // change 'edit rules' button to 'show rules'
   rulesBtn.textContent = 'Show rules';
@@ -314,7 +322,8 @@ startGameBtn.addEventListener('click', () => {
   noOfPlayersInputNo.disabled = true;
   difficultySelector.disabled = true;
 
-  // TODO end game button
+  // end game button
+  instructionDiv.appendChild(endGameBtn);
 
   // send settings to backend
   axios
@@ -326,7 +335,7 @@ startGameBtn.addEventListener('click', () => {
     })
     .then((response) => {
       const gameData = response.data;
-      console.log(gameData); // delete this TODO
+      console.log(gameData); // LOG
       CURRENT_GAME = gameData.id;
       // remove game intro message
       document.querySelector('.game-intro').remove();
@@ -374,15 +383,15 @@ startGameBtn.addEventListener('click', () => {
       inputField.classList.remove('hidden');
       // focus on input box
       inputField.focus();
-      // start countdown timer & fizzing sound TODO
+      // start countdown timer & fizzing sound -> TODO
       const timer =
         (gameData.duration + randomNumberGenerator(difficultySelector.value)) *
         1000;
-      console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer);
+      console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer); // LOG
       let timeout = false;
       // timeout function (can't cleartimeout when it is in another func) BUG
       const myTimeout = setTimeout(() => {
-        // run function if timer ended
+        // run function if timer ended before player gets word correct
         timerEnded();
       }, timer);
       axios
@@ -390,7 +399,7 @@ startGameBtn.addEventListener('click', () => {
           difficulty: difficultySelector.value,
         })
         .then((response) => {
-          console.log(`response: ${response.data}`);
+          console.log(`response: ${response.data}`); // LOG
           const guessLetters = response.data;
           // get word and add into bomb
           // add bomb word into bomb <img>
@@ -414,7 +423,10 @@ startGameBtn.addEventListener('click', () => {
                       // TODO
                       // 1. stop timer
                       clearInterval(myTimeout);
-                      console.log('timeout cleared');
+                      // 2. next player turn
+                      nextPlayer(gameDate.players);
+                      // 3. show start button
+                      console.log('timeout cleared'); // LOG
                       // 1. pass turn to next player
                       // 2. start btn appears again
                     }
@@ -425,4 +437,11 @@ startGameBtn.addEventListener('click', () => {
           });
         });
     });
+});
+
+/**
+ * end button function
+ */
+endGameBtn.addEventListener('click', () => {
+  axios.put(`/reset-game/${CURRENT_GAME}`);
 });
