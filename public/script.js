@@ -225,7 +225,9 @@ noOfPlayersInputNo.addEventListener('keydown', (e) => e.preventDefault());
 //----------------------------------
 //----------------------------------
 
-// function runs if user is logged in
+/**
+ * function runs if user is logged in
+ */
 const ifLoginTrue = () => {
   // clear login elements
   loginDiv.remove();
@@ -248,7 +250,7 @@ const ifLoginTrue = () => {
   logoutBtn.textContent = 'Logout';
   loginLogoutDiv.appendChild(logoutBtn);
 
-  // upon logout click TODO
+  // upon logout click
   logoutBtn.addEventListener('click', () => {
     axios.put(`/logout`);
     location.reload();
@@ -268,7 +270,6 @@ loginBtn.addEventListener('click', () => {
       // console.log(userName);
       // console.log(userData);
       ifLoginTrue();
-      // gameId.textContent = userData.id;
       userId.textContent = `${username}'s room`;
     })
     .catch((err) => {
@@ -311,7 +312,7 @@ rulesBtn.addEventListener('click', () => {
 });
 
 /**
- * end button function DOING
+ * start game function DOING
  */
 startGameBtn.addEventListener('click', () => {
   // change 'edit rules' button to 'show rules'
@@ -336,7 +337,7 @@ startGameBtn.addEventListener('click', () => {
     .then((response) => {
       const gameData = response.data;
       console.log(gameData); // LOG
-      CURRENT_GAME = gameData.id;
+      CURRENT_GAME = gameData;
       // remove game intro message
       document.querySelector('.game-intro').remove();
       // add 9 squares
@@ -390,6 +391,7 @@ startGameBtn.addEventListener('click', () => {
       console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer); // LOG
       let timeout = false;
       // timeout function (can't cleartimeout when it is in another func) BUG
+      // TODO what happens when bomb explodes
       const myTimeout = setTimeout(() => {
         // run function if timer ended before player gets word correct
         timerEnded();
@@ -423,10 +425,10 @@ startGameBtn.addEventListener('click', () => {
                       // TODO
                       // 1. stop timer
                       clearInterval(myTimeout);
-                      // 2. next player turn
-                      nextPlayer(gameDate.players);
-                      // 3. show start button
                       console.log('timeout cleared'); // LOG
+                      // 2. next player turn
+                      nextPlayer(gameData.players);
+                      // 3. show start button
                       // 1. pass turn to next player
                       // 2. start btn appears again
                     }
@@ -443,5 +445,8 @@ startGameBtn.addEventListener('click', () => {
  * end button function
  */
 endGameBtn.addEventListener('click', () => {
-  axios.put(`/reset-game/${CURRENT_GAME}`);
+  axios.put(`/reset-game/${CURRENT_GAME.id}`).then((response) => {
+    console.log(response);
+    location.reload();
+  });
 });
