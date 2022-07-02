@@ -336,7 +336,11 @@ startGameBtn.addEventListener('click', () => {
     })
     .then((response) => {
       const gameData = response.data;
-      console.log(gameData); // LOG
+      console.log(
+        '🚀 ~ file: script.js ~ line 339 ~ .then ~ gameData',
+        gameData
+      );
+
       CURRENT_GAME = gameData;
       // remove game intro message
       document.querySelector('.game-intro').remove();
@@ -395,7 +399,7 @@ startGameBtn.addEventListener('click', () => {
       const myTimeout = setTimeout(() => {
         // run function if timer ended before player gets word correct
         timerEnded();
-        nextPlayer(gameData.players);
+        nextPlayer();
       }, timer);
       // go to next player
       axios
