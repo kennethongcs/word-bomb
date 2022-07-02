@@ -121,12 +121,13 @@ const timerEnded = () => {
   // 2. show start button
 };
 
+// BUG current player not showing new player
 const nextPlayer = () => {
-  console.log('next player');
+  console.log('next players turn');
   axios.put(`/next-player`, {
     CURRENT_GAME
   }).then((response) => {
-    console.log(response.data);
+   
     // update global var for current game
     CURRENT_GAME = response.data
   })
