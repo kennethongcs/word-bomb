@@ -111,7 +111,6 @@ const randomNumberGenerator = (difficultyLevel) => {
   }
 };
 
-// DOING
 const timerEnded = () => {
   console.log('timeout! 💣');
   doomTakeDamage()
