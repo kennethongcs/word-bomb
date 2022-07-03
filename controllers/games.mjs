@@ -144,6 +144,7 @@ export default function initGamesController(db) {
     }
   };
 
+  // DOING - show start button & change to "next player start" textcontent
   const nextPlayer = async (req, res) => {
     try {
       // get current player
