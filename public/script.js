@@ -397,10 +397,10 @@ startGameBtn.addEventListener('click', () => {
       // timeout function (can't cleartimeout when it is in another func) BUG
       // DOING
       const myTimeout = setTimeout(() => {
-        // run function timerEnded before player gets word correct & bomb explodes
+        // run function timerEnded before player gets word correct & bomb explodes & go to next player turn
         timerEnded();
+        console.log(`🔎Line 402 check, ${CURRENT_GAME}`);
         // change player reduction in life
-        nextPlayer();
       }, timer);
       // go to next player
       axios
