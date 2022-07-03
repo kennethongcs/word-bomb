@@ -281,7 +281,7 @@ export default function initGamesController(db) {
     try {
       // get current player
       const data = req.body.CURRENT_GAME;
-      console.log('🚀 ~ file: games.mjs ~ line 282 ~ nextPlayer ~ data', data);
+      // console.log('🚀 ~ file: games.mjs ~ line 282 ~ nextPlayer ~ data', data); // LOG
       let currentPlayer = data.currentPlayer;
       const { players } = data;
       const { id } = data;
@@ -342,25 +342,60 @@ export default function initGamesController(db) {
     }
   };
 
-  // DOING
+  // DOING - logic to lose life
   const loseLife = async (req, res) => {
     try {
       const data = req.body.CURRENT_GAME;
-      // console.log(data);
+      console.log('🚀 ~ file: games.mjs ~ line 349 ~ loseLife ~ data', data);
+
       let currentPlayer = data.currentPlayer;
+
       const { players } = data;
       const { id } = data;
-      const { loginUser } = data;
+      const loginUser = data.gameOwner;
       const { duration } = data;
+      const { difficulty } = data;
 
       const currentPlayerName = `player${currentPlayer}`;
-      // decrease current player life by 1
-      // console.log(data.lives[currentPlayerName]); // LOG
+      console.log(
+        '🚀 ~ file: games.mjs ~ line 361 ~ loseLife ~ currentPlayerName',
+        currentPlayerName
+      );
 
       const currentGame = await db.Game.findOne({
         where: {
-          id: id,
+          gameState: { gameOwner: loginUser, status: 'active' },
         },
+      });
+      // decrease current player life by 1
+      currentGame.gameState.lives[currentPlayerName] -= 1;
+
+      const lives = {};
+      for (let i = 1; i <= players; i += 1) {
+        lives[`player${i}`] = currentGame.gameState.lives[`player${i}`];
+      }
+
+      const updatedGameState = await currentGame.update({
+        gameState: {
+          status: 'active',
+          gameOwner: loginUser,
+          duration: duration,
+          players: players,
+          currentPlayer: currentPlayer,
+          difficulty: difficulty,
+          lives,
+        },
+      });
+
+      res.send({
+        id: updatedGameState.id,
+        gameOwner: loginUser,
+        status: updatedGameState.gameState.status,
+        duration: updatedGameState.gameState.duration,
+        players: updatedGameState.gameState.players,
+        lives: updatedGameState.gameState.lives,
+        currentPlayer: updatedGameState.gameState.currentPlayer,
+        difficulty: updatedGameState.gameState.difficulty,
       });
     } catch (err) {
       console.log(`lose life error: ${err}`);
