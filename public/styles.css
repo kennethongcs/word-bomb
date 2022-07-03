@@ -279,6 +279,7 @@ body {
 
 .current-player {
   background-color: cadetblue;
+  border-radius: 100%;
 }
 
 #doom-damage {
