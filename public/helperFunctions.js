@@ -114,12 +114,12 @@ const randomNumberGenerator = (difficultyLevel) => {
 // DOING
 const timerEnded = () => {
   console.log('timeout! 💣');
+  doomTakeDamage()
   // 1. lose 1 life, next player turn
   axios.put('/lose-life', {
     CURRENT_GAME
   }).then((response) => {
     CURRENT_GAME = response.data
-    // console.log("🚀 ~ file: helperFunctions.js ~ line 122 ~ timerEnded ~ CURRENT_GAME", CURRENT_GAME) // LOG
     // go to next players turn
     nextPlayer()
   }) // DONE
@@ -139,3 +139,10 @@ const nextPlayer = () => {
   })
   // show start button to repeat process again
 };
+
+const doomTakeDamage = () => {
+  damage.classList.add("do-damage");
+  setTimeout(function () {
+    damage.classList.remove("do-damage");
+  }, 400);
+}
