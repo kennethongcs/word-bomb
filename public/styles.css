@@ -277,6 +277,35 @@ body {
   background: transparent;
 }
 
+.current-player {
+  background-color: cadetblue;
+}
+
+#doom-damage {
+  background-color: red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.do-damage {
+  background-color: red;
+  animation: 0.4s doom-damage forwards;
+}
+
+@keyframes doom-damage {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .hidden {
   display: none;
 }
