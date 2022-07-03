@@ -122,139 +122,6 @@ export default function initGamesController(db) {
         currentPlayer: currentGame.gameState.currentPlayer,
         difficulty: currentGame.gameState.difficulty,
       });
-
-      // else if (players === 2) {
-      //   const [currentGame, created] = await db.Game.findOrCreate({
-      //     where: {
-      //       gameState: { gameOwner: loginUser, status: 'active' },
-      //     },
-      //     defaults: {
-      //       gameState: {
-      //         status: 'active',
-      //         gameOwner: loginUser,
-      //         duration: duration,
-      //         players: players,
-      //         currentPlayer: 1,
-      //         difficulty: difficulty,
-      //         lives: {
-      //           player1: lives,
-      //           player2: lives,
-      //           // player3: lives,
-      //           // player4: lives
-      //         },
-      //       },
-      //     },
-      //   });
-      //   console.log('2 player game created/joined');
-      //   // if game is joined / created then create game in through table
-      //   if (created) {
-      //     const currentPlayer = await db.User.findOne({
-      //       where: {
-      //         id: loginUser,
-      //       },
-      //     });
-      //     // add game to join table
-      //     const joinTableEntry = await currentGame.addUser(currentPlayer);
-      //   }
-      //   res.send({
-      //     id: currentGame.id,
-      //     gameOwner: currentGame.gameState.gameOwner,
-      //     status: currentGame.status,
-      //     duration: currentGame.gameState.duration,
-      //     players: currentGame.gameState.players,
-      //     lives: currentGame.gameState.lives,
-      //     currentPlayer: currentGame.gameState.currentPlayer,
-      //     difficulty: currentGame.gameState.difficulty,
-      //   });
-      // } else if (players === 3) {
-      //   const [currentGame, created] = await db.Game.findOrCreate({
-      //     where: {
-      //       gameState: { gameOwner: loginUser, status: 'active' },
-      //     },
-      //     defaults: {
-      //       gameState: {
-      //         status: 'active',
-      //         gameOwner: loginUser,
-      //         duration: duration,
-      //         players: players,
-      //         currentPlayer: 1,
-      //         difficulty: difficulty,
-
-      //         lives: {
-      //           player1: lives,
-      //           player2: lives,
-      //           player3: lives,
-      //           // player4: lives
-      //         },
-      //       },
-      //     },
-      //   });
-      //   console.log('3 player game created/joined');
-      //   // if game is joined / created then create game in through table
-      //   if (created) {
-      //     const currentPlayer = await db.User.findOne({
-      //       where: {
-      //         id: loginUser,
-      //       },
-      //     });
-      //     // add game to join table
-      //     const joinTableEntry = await currentGame.addUser(currentPlayer);
-      //   }
-      //   res.send({
-      //     id: currentGame.id,
-      //     gameOwner: currentGame.gameState.gameOwner,
-      //     status: currentGame.gameState.status,
-      //     duration: currentGame.gameState.duration,
-      //     players: currentGame.gameState.players,
-      //     lives: currentGame.gameState.lives,
-      //     currentPlayer: currentGame.gameState.currentPlayer,
-      //     difficulty: currentGame.gameState.difficulty,
-      //   });
-      // } else if (players === 4) {
-      //   const [currentGame, created] = await db.Game.findOrCreate({
-      //     where: {
-      //       gameState: { gameOwner: loginUser, status: 'active' },
-      //     },
-      //     defaults: {
-      //       gameState: {
-      //         status: 'active',
-      //         gameOwner: loginUser,
-      //         duration: duration,
-      //         players: players,
-      //         currentPlayer: 1,
-      //         difficulty: difficulty,
-
-      //         lives: {
-      //           player1: lives,
-      //           player2: lives,
-      //           player3: lives,
-      //           player4: lives,
-      //         },
-      //       },
-      //     },
-      //   });
-      //   console.log('4 player game created/joined');
-      //   // if game is joined / created then create game in through table
-      //   if (created) {
-      //     const currentPlayer = await db.User.findOne({
-      //       where: {
-      //         id: loginUser,
-      //       },
-      //     });
-      //     // add game to join table
-      //     const joinTableEntry = await currentGame.addUser(currentPlayer);
-      //   }
-      //   res.send({
-      //     id: currentGame.id,
-      //     gameOwner: currentGame.gameState.gameOwner,
-      //     status: currentGame.gameState.status,
-      //     duration: currentGame.gameState.duration,
-      //     players: currentGame.gameState.players,
-      //     lives: currentGame.gameState.lives,
-      //     currentPlayer: currentGame.gameState.currentPlayer,
-      //     difficulty: currentGame.gameState.difficulty,
-      //   });
-      // }
     } catch (err) {
       console.log(`Error: ${err}`);
     }
@@ -281,7 +148,7 @@ export default function initGamesController(db) {
     try {
       // get current player
       const data = req.body.CURRENT_GAME;
-      // console.log('🚀 ~ file: games.mjs ~ line 282 ~ nextPlayer ~ data', data); // LOG
+      console.log('🚀 ~ file: games.mjs ~ line 282 ~ nextPlayer ~ data', data); // LOG
       let currentPlayer = data.currentPlayer;
       const { players } = data;
       const { id } = data;
@@ -299,7 +166,6 @@ export default function initGamesController(db) {
       );
 
       // increase current player by 1
-      console.log('currentplayer', currentPlayer);
       currentPlayer += 1;
       // if currentPlayer > players, change back to 1
       if (currentPlayer > players) {
