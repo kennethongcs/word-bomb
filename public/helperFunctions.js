@@ -117,7 +117,10 @@ const timerEnded = () => {
   // 1. lose 1 life, next player turn
   axios.put('/lose-life', {
     CURRENT_GAME
-  })
+  }).then((response) => {
+    CURRENT_GAME = response.data
+  }) // DONE
+  // start next players turn
   // 2. show start button
 };
 
