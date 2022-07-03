@@ -404,7 +404,7 @@ startGameBtn.addEventListener('click', () => {
         (gameData.duration + randomNumberGenerator(CURRENT_GAME.difficulty)) *
         1000;
       let timeout = false;
-      // timeout function (can't cleartimeout when it is in another func) BUG
+      // timeout function (can't cleartimeout when it is in another func)
       // DOING
       const myTimeout = setTimeout(() => {
         // run function timerEnded before player gets word correct & bomb explodes & go to next player turn
