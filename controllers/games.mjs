@@ -148,7 +148,6 @@ export default function initGamesController(db) {
     try {
       // get current player
       const data = req.body.CURRENT_GAME;
-      console.log('🚀 ~ file: games.mjs ~ line 282 ~ nextPlayer ~ data', data); // LOG
       let currentPlayer = data.currentPlayer;
       const { players } = data;
       const { id } = data;
