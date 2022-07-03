@@ -5,6 +5,11 @@ const bottomBar = document.querySelector('.start-btn-div');
 const gameDiv = document.querySelector('.game-display');
 const canvas = document.querySelector('.canvas');
 
+// add explode effect
+const damage = document.getElementById('doom-damage');
+damage.classList.add('bomb-explode'); // BUG
+document.querySelector('.game-container').appendChild(damage);
+
 // login div
 const loginDiv = document.createElement('div');
 loginDiv.classList.add('login-div');
@@ -382,6 +387,12 @@ startGameBtn.addEventListener('click', () => {
       document.querySelector('.square4').appendChild(imageBomb);
       createPlayers(gameData);
 
+      // highlight current player div
+      const currentPlayerDiv = document.querySelector(
+        `.player${CURRENT_GAME.currentPlayer}-div`
+      );
+      currentPlayerDiv.classList.add('current-player');
+
       // 1. remove start btn
       startGameBtn.remove();
       // 2. add input to bottom border
@@ -392,14 +403,12 @@ startGameBtn.addEventListener('click', () => {
       const timer =
         (gameData.duration + randomNumberGenerator(CURRENT_GAME.difficulty)) *
         1000;
-      console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer); // LOG
       let timeout = false;
       // timeout function (can't cleartimeout when it is in another func) BUG
       // DOING
       const myTimeout = setTimeout(() => {
         // run function timerEnded before player gets word correct & bomb explodes & go to next player turn
         timerEnded();
-        console.log(`🔎Line 402 check, ${CURRENT_GAME}`);
         // change player reduction in life
       }, timer);
       // go to next player
