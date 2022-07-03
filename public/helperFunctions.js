@@ -119,6 +119,9 @@ const timerEnded = () => {
     CURRENT_GAME
   }).then((response) => {
     CURRENT_GAME = response.data
+    // console.log("🚀 ~ file: helperFunctions.js ~ line 122 ~ timerEnded ~ CURRENT_GAME", CURRENT_GAME) // LOG
+    // go to next players turn
+    nextPlayer()
   }) // DONE
   // start next players turn
   // 2. show start button
