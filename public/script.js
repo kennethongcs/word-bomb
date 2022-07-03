@@ -395,10 +395,11 @@ startGameBtn.addEventListener('click', () => {
       console.log('🚀 ~ file: script.js ~ line 376 ~ .then ~ timer', timer); // LOG
       let timeout = false;
       // timeout function (can't cleartimeout when it is in another func) BUG
-      // TODO what happens when bomb explodes
+      // DOING
       const myTimeout = setTimeout(() => {
-        // run function if timer ended before player gets word correct
+        // run function timerEnded before player gets word correct & bomb explodes
         timerEnded();
+        // change player reduction in life
         nextPlayer();
       }, timer);
       // go to next player
