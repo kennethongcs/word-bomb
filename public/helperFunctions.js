@@ -130,6 +130,13 @@ const timerEnded = () => {
         }
       }
       if (numberOfPlayersDead['dead'] === amtOfPlayers - 1) {
+        // loop through lives obj to find winner
+        for (const [key, value] of Object.entries(CURRENT_GAME.lives)) {
+          if (value > 0) {
+            WINNER = key;
+            winnerName.textContent = `🎉 ${WINNER} is the winner! 🎉`;
+          }
+        }
         // end game
         console.log('🎬 end game');
         endGame();
@@ -145,8 +152,15 @@ const timerEnded = () => {
 };
 
 const endGame = () => {
-  // 1. hide nextplayerButton, show startGame button
-  // 2. throw up splash screen
+  // 1. hide playing elements
+  bottomBar.classList.add('hidden');
+  canvas.classList.toggle('hidden');
+  // 2. throw up splash screen - showing the player that won with New Game button
+  endGameDiv.classList.remove('hidden');
+  // 3. end game
+  axios.put(`/reset-game/${CURRENT_GAME.id}`).then((response) => {
+    endGameBtn.classList.add('hidden');
+  });
 };
 
 const nextPlayer = () => {
