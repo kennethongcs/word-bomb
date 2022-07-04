@@ -464,6 +464,7 @@ startNextGameBtn.addEventListener('click', () => {
   startNextGameBtn.classList.toggle('hidden');
   // unhide input field
   inputField.classList.toggle('hidden');
+  inputField.focus();
   // start timer DOING
   const timer =
     (gameData.duration + randomNumberGenerator(CURRENT_GAME.difficulty)) * 1000;
