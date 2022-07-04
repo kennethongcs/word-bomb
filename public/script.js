@@ -1,4 +1,5 @@
 let CURRENT_GAME;
+let WINNER;
 
 const topBar = document.querySelector('.top');
 const bottomBar = document.querySelector('.start-btn-div');
@@ -7,7 +8,7 @@ const canvas = document.querySelector('.canvas');
 
 // add explode effect
 const damage = document.getElementById('doom-damage');
-damage.classList.add('bomb-explode'); // BUG
+damage.classList.add('bomb-explode');
 document.querySelector('.game-container').appendChild(damage);
 
 // login div
@@ -91,6 +92,28 @@ const endGameBtn = document.createElement('button');
 endGameBtn.classList.add('endgame-btn', 'btn');
 endGameBtn.setAttribute('type', 'btn');
 endGameBtn.textContent = 'End game';
+
+// reload button
+const reloadDiv = document.createElement('div');
+reloadDiv.classList.add('reload-div');
+const reloadButton = document.createElement('button');
+reloadButton.classList.add('reload-btn', 'btn');
+reloadButton.setAttribute('type', 'btn');
+reloadButton.textContent = 'Click to Play Again';
+reloadDiv.appendChild(reloadButton);
+
+// end game pane DOING
+canvas.classList.add('hidden');
+const endGameDiv = document.createElement('div');
+endGameDiv.classList.add('end-game-pane', 'hidden');
+const endGameContainer = document.createElement('div');
+const winnerName = document.createElement('p');
+winnerName.classList.add('winner-name');
+
+endGameContainer.appendChild(winnerName);
+endGameContainer.appendChild(reloadDiv);
+endGameDiv.appendChild(endGameContainer);
+gameDiv.appendChild(endGameDiv);
 
 // settings pane
 const settings = document.createElement('div');
@@ -526,4 +549,11 @@ endGameBtn.addEventListener('click', () => {
     console.log(response);
     location.reload();
   });
+});
+
+/**
+ * reload button function
+ */
+reloadButton.addEventListener('click', () => {
+  location.reload();
 });
