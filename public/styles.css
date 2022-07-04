@@ -202,6 +202,18 @@ body {
   padding-right: 10px;
 }
 
+.start-next-game-btn {
+  background: green;
+  color: #fff;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 .rules-btn {
   color: white;
   font-weight: bold;
