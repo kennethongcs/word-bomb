@@ -242,6 +242,40 @@ body {
   background-color: red;
 }
 
+.reload-div {
+  position: relative;
+}
+@keyframes blinkingBackground {
+  0% {
+    background-color: #10c018;
+  }
+  25% {
+    background-color: #1056c0;
+  }
+  50% {
+    background-color: #ef0a1a;
+  }
+  75% {
+    background-color: #254878;
+  }
+  100% {
+    background-color: #04a1d5;
+  }
+}
+.reload-btn {
+  position: absolute;
+  color: #fff;
+  padding: 10px;
+  /* display: inline-block; */
+  border-radius: 5px;
+  animation: blinkingBackground 2s infinite;
+  left: 50%;
+  top: 60px;
+  padding-left: 10px;
+  padding-right: 10px;
+  transform: translate(-50%, -50%);
+}
+
 /* settings pane */
 .helper-header {
   font-size: larger;
@@ -263,6 +297,24 @@ body {
   background-color: darkgrey;
   padding: 6px;
   margin-top: 4px;
+}
+
+/* endgame pane */
+.end-game-pane {
+  display: flex;
+  color: darkred;
+  background-color: antiquewhite;
+  flex-direction: column;
+  box-shadow: 0 0 1rem;
+  height: 400px;
+  width: 615px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-name {
+  font-size: 3rem;
 }
 
 /* squares for canvas */
