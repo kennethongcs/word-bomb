@@ -62,6 +62,13 @@ startGameBtn.setAttribute('type', 'btn');
 startGameBtn.textContent = 'Start Game';
 bottomBar.appendChild(startGameBtn);
 
+const startNextGameBtn = document.createElement('button');
+startNextGameBtn.classList.add('hidden');
+startNextGameBtn.classList.add('start-next-game-btn', 'btn');
+startNextGameBtn.setAttribute('type', 'btn');
+startNextGameBtn.textContent = 'Next player';
+bottomBar.appendChild(startNextGameBtn);
+
 // top banner
 const gameId = document.querySelector('.game_id');
 const userId = document.querySelector('.user');
@@ -211,12 +218,6 @@ inputField.classList.add('input-field', 'hidden');
 inputField.placeholder = 'Type here';
 bottomBar.appendChild(inputField);
 
-// hidden submit button for input field
-// const inputFieldSubmitBtn = document.createElement('input');
-// inputFieldSubmitBtn.setAttribute('type', 'submit');
-// inputFieldSubmitBtn.classList.add('hidden');
-// bottomBar.appendChild(inputFieldSubmitBtn);
-
 // div to add into bomb <img>
 const bombWord = document.createElement('p');
 bombWord.classList.add('bomb-word');
@@ -302,8 +303,10 @@ rulesBtn.addEventListener('click', () => {
   if (rulesBtn.classList.contains('expanded')) {
     rulesBtn.textContent = 'Close rules';
     startGameBtn.classList.add('blur');
+    startNextGameBtn.classList.add('blur');
     startGameBtn.disabled = true;
   } else {
+    startNextGameBtn.classList.remove('blur');
     startGameBtn.classList.remove('blur');
     rulesBtn.textContent = 'Edit rules';
     startGameBtn.disabled = false;
@@ -317,7 +320,7 @@ rulesBtn.addEventListener('click', () => {
 });
 
 /**
- * start game function DOING
+ * start game function
  */
 startGameBtn.addEventListener('click', () => {
   // change 'edit rules' button to 'show rules'
@@ -348,7 +351,7 @@ startGameBtn.addEventListener('click', () => {
 
       CURRENT_GAME = gameData;
       // remove game intro message
-      document.querySelector('.game-intro').remove();
+      document.querySelector('.game-intro').remove(); // BUG
       // add 9 squares
       const containerForGridDiv = document.createElement('div');
       containerForGridDiv.classList.add('container');
@@ -365,7 +368,6 @@ startGameBtn.addEventListener('click', () => {
           const nameLabel = document.createElement('label');
           nameDiv.classList.add(`nameDiv-${i}`);
           nameLabel.classList.add(`nameLabel-${i}`);
-          // nameLabel.textContent = i;
           nameDiv.appendChild(nameLabel);
           const livesDiv = document.createElement('div');
           const livesLabel = document.createElement('label');
@@ -387,14 +389,11 @@ startGameBtn.addEventListener('click', () => {
       document.querySelector('.square4').appendChild(imageBomb);
       createPlayers(gameData);
 
-      // highlight current player div
-      const currentPlayerDiv = document.querySelector(
-        `.player${CURRENT_GAME.currentPlayer}-div`
-      );
-      currentPlayerDiv.classList.add('current-player');
+      // highlight current player
+      highlightCurrentPlayer();
 
       // 1. remove start btn
-      startGameBtn.remove();
+      startGameBtn.classList.toggle('hidden');
       // 2. add input to bottom border
       inputField.classList.remove('hidden');
       // focus on input box
@@ -403,15 +402,15 @@ startGameBtn.addEventListener('click', () => {
       const timer =
         (gameData.duration + randomNumberGenerator(CURRENT_GAME.difficulty)) *
         1000;
-      let timeout = false;
+      // let timeout = false;
       // timeout function (can't cleartimeout when it is in another func)
-      // DOING
       const myTimeout = setTimeout(() => {
         // run function timerEnded before player gets word correct & bomb explodes & go to next player turn
         timerEnded();
         // change player reduction in life
       }, timer);
       // go to next player
+
       axios
         .post('/word', {
           difficulty: difficultySelector.value,
@@ -444,7 +443,6 @@ startGameBtn.addEventListener('click', () => {
                       console.log('timeout cleared'); // LOG
                       // 2. next player turn
                       nextPlayer();
-                      // 3. show start button
                       // 1. pass turn to next player
                       // 2. start btn appears again
                     }
@@ -454,6 +452,68 @@ startGameBtn.addEventListener('click', () => {
             }
           });
         });
+    });
+});
+
+/**
+ * start next game function
+ */
+startNextGameBtn.addEventListener('click', () => {
+  let gameData = CURRENT_GAME; // DOING
+  // hide next player button
+  startNextGameBtn.classList.toggle('hidden');
+  // unhide input field
+  inputField.classList.toggle('hidden');
+  // start timer DOING
+  const timer =
+    (gameData.duration + randomNumberGenerator(CURRENT_GAME.difficulty)) * 1000;
+  // end timer
+  const myTimeout = setTimeout(() => {
+    // run function timerEnded before player gets word correct & bomb explodes & go to next player turn
+    timerEnded();
+    // change player reduction in life
+  }, timer);
+  // get new word
+  axios
+    .post('/word', {
+      difficulty: difficultySelector.value,
+    })
+    .then((response) => {
+      console.log(`response: ${response.data}`); // LOG
+      const guessLetters = response.data;
+      // get word and add into bomb
+      // add bomb word into bomb <img>
+      bombWord.textContent = response.data;
+      document.querySelector('.square4').appendChild(bombWord);
+      // send input to server for verification
+      inputField.addEventListener('keypress', (x) => {
+        if (x.key === 'Enter') {
+          // check if input contains the letters taken from server
+          const playersGuess = inputField.value;
+          // console.log(playersGuess);
+          if (playersGuess.includes(guessLetters)) {
+            // send a request to server to check if word exists
+            axios
+              .post('/wordverification', {
+                input: inputField.value,
+              })
+              .then((response) => {
+                const result = response.data;
+                if (result === 'Correct') {
+                  // TODO
+                  // 1. stop timer
+                  clearInterval(myTimeout);
+                  console.log('timeout cleared'); // LOG
+                  // 2. next player turn
+                  nextPlayer();
+                  // 1. pass turn to next player
+                  // 2. start btn appears again
+                }
+              });
+            inputField.value = '';
+          }
+        }
+      });
     });
 });
 
