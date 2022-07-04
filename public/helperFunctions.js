@@ -119,16 +119,34 @@ const timerEnded = () => {
     })
     .then((response) => {
       CURRENT_GAME = response.data;
-      // go to next players turn
-      nextPlayer();
+      const amtOfPlayers = CURRENT_GAME.players;
+      // loop through the player lives obj
+      const numberOfPlayersDead = {
+        dead: 0,
+      };
+      for (const [key, value] of Object.entries(CURRENT_GAME.lives)) {
+        if (value === 0) {
+          numberOfPlayersDead['dead'] += 1;
+        }
+      }
+      if (numberOfPlayersDead['dead'] === amtOfPlayers - 1) {
+        // end game
+        console.log('🎬 end game');
+        endGame();
+      } else {
+        // go to next players turn
+        nextPlayer();
+      }
     })
     .then((response) => {
       // update canvas with updated lives left
       createPlayers(CURRENT_GAME);
     });
-  // DONE
-  // start next players turn
-  // 2. show start button
+};
+
+const endGame = () => {
+  // 1. hide nextplayerButton, show startGame button
+  // 2. throw up splash screen
 };
 
 const nextPlayer = () => {
