@@ -121,23 +121,47 @@ const timerEnded = () => {
       CURRENT_GAME = response.data;
       // go to next players turn
       nextPlayer();
-    }); // DONE
+    })
+    .then((response) => {
+      // update canvas with updated lives left
+      createPlayers(CURRENT_GAME);
+    });
+  // DONE
   // start next players turn
   // 2. show start button
 };
 
-// BUG current player not showing new player
 const nextPlayer = () => {
   console.log('next players turn');
+  // remove current-player classList from current player
+  changeCurrentPlayer();
   axios
     .put(`/next-player`, {
       CURRENT_GAME,
     })
     .then((response) => {
-      // update global var for current game
+      // update global var for current game (after switching player in backend)
       CURRENT_GAME = response.data;
+      changeCurrentPlayer();
     });
   // show start button to repeat process again
+  // startNextGameBtn.classList.toggle('hidden');
+  startNextGameBtn.classList.toggle('hidden');
+  inputField.classList.toggle('hidden');
+};
+
+const changeCurrentPlayer = () => {
+  const currentPlayer = CURRENT_GAME.currentPlayer;
+  document
+    .querySelector(`.player${currentPlayer}-div`)
+    .classList.toggle('current-player');
+};
+
+const highlightCurrentPlayer = () => {
+  const currentPlayerDiv = document.querySelector(
+    `.player${CURRENT_GAME.currentPlayer}-div`
+  );
+  currentPlayerDiv.classList.add('current-player');
 };
 
 const doomTakeDamage = () => {
