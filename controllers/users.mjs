@@ -74,23 +74,5 @@ export default function initUsersController(db) {
     res.send(user);
   };
 
-  // const loginCheck = async (req, res, next) => {
-  //   req.isUserLoggedIn = false;
-  //   if (req.cookies.userId && req.cookies.sessionId) {
-  //     const hash = getHashSalted(req.cookies.userId);
-  //     if (req.cookies.sessionId === hash) {
-  //       req.isUserLoggedIn = true;
-  //       req.user = req.cookies.userId;
-  //       next();
-  //     }
-  //   }
-  //   next();
-  // };
-
-  // const userState = async (req, res, next) => {
-  //   app.locals.user = req.user;
-  //   next();
-  // };
-
   return { root, login, logout, user };
 }
